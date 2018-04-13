@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.axelor</groupId>
+  <artifactId>axelor-el</artifactId>
+  <name>Tomcat EL Repackaging</name>
+  <version>8.5.24</version>
+  <description>A repackaging of Tomcat EL com.axelor namespace to avoid version conflicts.</description>
+  <url>http://axelor.com</url>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createSourcesJar>true</createSourcesJar>
+              <artifactSet>
+                <includes>
+                  <include>org.apache.tomcat:tomcat-jasper-el</include>
+                  <include>org.apache.tomcat:tomcat-el-api</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>javax.el</pattern>
+                  <shadedPattern>com.axelor.internal.javax.el</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.apache.el</pattern>
+                  <shadedPattern>com.axelor.internal.org.apache.el</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <Implementation-URL>${project.url}</Implementation-URL>
+            </manifestEntries>
+            <addMavenDescriptor>false</addMavenDescriptor>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <distributionManagement>
+    <repository>
+      <id>axelor-releases-repository</id>
+      <name>Axelor Releases Repository</name>
+      <url>http://repository.axelor.com/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>axelor-snapshots-repository</id>
+      <name>Axelor Snapshots Repository</name>
+      <url>http://repository.axelor.com/nexus/repository/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+</project>
+
