@@ -1,1 +1,1 @@
-docker container exec -ti axelor /bin/bash
+docker container exec -ti crm /bin/bash
