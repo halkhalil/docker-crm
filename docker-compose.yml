@@ -1,1 +1,37 @@
-version: '2'services:    axelor:        image: vuminhtuan/crm        container_name: crm        depends_on:            - axelor_db        ports:            - 8989:8080        environment:          - JAVA_TOOL_OPTIONS=-Xmx6g -Xms2g -Dfile.encoding=UTF8          - _JAVA_OPTIONS=-Xmx6g -Xms2g -Dfile.encoding=UTF8          - JAVA_OPTS=-Xmx6g -Xms2g -Dfile.encoding=UTF8        labels:            - traefik.enable=true            - traefik.docker.network=reverseproxy_default            - traefik.axelor.frontend.rule=Host:crm.xxx.com            - traefik.axelor.port=8989        networks:            - reverseproxy_default        restart: always        volumes:             - ./work/:/work    crm_db:        image: postgres        container_name: crm_db        environment:            - POSTGRES_DB=crm            - POSTGRES_USER=crm            - POSTGRES_PASSWORD=crm        networks:            - reverseproxy_default        restart: alwaysnetworks:    reverseproxy_default:        external:            name: reverseproxy_default
+version: '2'
+services:
+    crm:
+        image: crm
+        container_name: crm
+        depends_on:
+            - crm_db
+        ports:
+            - '8282:8080'
+        environment:
+            - 'JAVA_TOOL_OPTIONS=-Xmx6g -Xms2g -Dfile.encoding=UTF8'
+            - '_JAVA_OPTIONS=-Xmx6g -Xms2g -Dfile.encoding=UTF8'
+            - 'JAVA_OPTS=-Xmx6g -Xms2g -Dfile.encoding=UTF8'
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.docker.network=web'
+            - 'traefik.tomcat.frontend.rule=Host:crm.minhtuanvu.com'
+            - 'traefik.tomcat.frontend.passHostHeader=true'
+        networks:
+            - web
+        restart: always
+        # volumes:
+        #     - './work/:/work'
+    crm_db:
+        image: postgres
+        container_name: crm_db
+        environment:
+            - POSTGRES_DB=crm
+            - POSTGRES_USER=crm
+            - POSTGRES_PASSWORD=crm
+        networks:
+            - web
+        restart: always
+networks:
+    web:
+        external:
+            name: web

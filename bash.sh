@@ -1,1 +1,1 @@
-docker container exec -ti crm /bin/bash
+docker container exec -it crm bash

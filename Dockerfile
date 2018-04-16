@@ -45,6 +45,7 @@ COPY ./abs-webapp $CRM_HOME/abs-webapp
 COPY ./.m2 /root/.m2
 
 RUN \
+    rm $CATALINA_HOME/webapps/* -R  && \
     cd $CRM_HOME/axelor-development-kit && ./gradlew clean publishToMavenLocal --no-daemon -x test && \
     cd $CRM_HOME/abs-webapp && ./gradlew clean build --no-daemon -x test && \
-    cp $CRM_HOME/abs-webapp/build/libs/*.war $CATALINA_HOME/webapps/
+    cp $CRM_HOME/abs-webapp/build/libs/*.war $CATALINA_HOME/webapps/ROOT.war
